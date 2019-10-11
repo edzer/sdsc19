@@ -1,0 +1,14 @@
+ML on spatial data: need to throw in x + y (or long + lat)
+
+ -> their coherence is gone
+ -> are solutions rotation/translation invariant?
+
+ IN CASE OF MULTIPOINT/LINE/POLYGON geometry:
+ -> dropping shape, size, 
+ -> distance, touches, etc relationships are gone
+ -> meaning ("size") of long depends on lat
+
+
+ change of support
+
+ machine learning

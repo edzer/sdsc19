@@ -1,0 +1,78 @@
+---
+title: "From Data Science to Spatial Data Science"
+author: "Edzer Pebesma"
+date: "10/16/2019, Spatial Data Science Conference, NY"
+output:
+  ioslides_presentation:
+    css: pres.css
+    smaller: true
+    widescreen: true
+  slidy_presentation: default
+  beamer_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(sf)
+library(tidyverse)
+nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
+xy = st_coordinates(st_centroid(nc$geom))
+```
+
+## Data science: the table view
+
+```{r, results='asis'}
+cols = c(3,5,9:14)
+knitr::kable(as.data.frame(nc)[1:7,cols])
+```
+
+##
+```{r, results='asis'}
+cols = c(3,5,9:10,16:17)
+# xy = st_coordinates((nc$geom))
+nc$longitude = xy[,1]
+nc$latitude = xy[,2]
+knitr::kable(as.data.frame(nc)[1:7,cols])
+```
+
+##
+```{r, results='asis'}
+cols = c(3,5,9:14)
+nc$geometry = format(nc$geom, width = 50)
+cols = c(3,5,9:10,ncol(nc))
+knitr::kable(as.data.frame(nc)[1:7,cols])
+```
+
+## the "shapefile" view
+
+
+```{r}
+plot(nc[c("SID74", "SID79")], key.pos = 4)
+st_crs(nc)
+```
+
+
+- what is data science?
+- analysing tables, creating the right table(s), running a ML or recommender algorithm in order to predict the target variable
+- now coordinates come in
+- what do they mean?
+
+- measurement units
+- as opposed to most variables, coordinates form pairs (or triplets)
+- without the other(s), single coordinate values loose much of their meaning
+
+- place information is often not summarized sufficiently by a pair of coordinates: one needs to have set of points, a linestring, a set of these, a polygon, a set of these, or some mix: (simple feature geometries)
+
+(go here into spherical geometry as opposed to planar geometry?)
+("simple" in simple features, but what does a "straight" line between two points _mean_, on a sphere?)
+
+- if we want to join information spatially, we have many predicates that can be used: intersects, overlaps, covers, touches, ... and more complex can be easily deviced (example: touch along line, not point)
+
+- after joining spatially, what happens to the attributes? if we want to analyse data, _support_ is of importance
+
+- next comes in: time (e.g., movement): linear? cyclic?
+
+- next comes in: field data (raster, data cubes)
+
+- spatial join may involve spatial aggregations:
+  I want to have property x for spatial geometries y:
