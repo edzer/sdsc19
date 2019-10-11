@@ -6,3 +6,7 @@ all:
 
 view:
 	google-chrome docs/index.html
+
+push:
+	git commit -m update -a
+	git push

@@ -71,29 +71,10 @@ knitr::include_graphics('xkcd2.png')
 ```
 https://xkcd.com/977/
 
+## Joining tables, spatially
 
-##
+options, when geometry is not a point
 
-- analysing tables, creating the right table(s), running a ML or recommender algorithm in order to predict the target variable
-- now coordinates come in
-- what do they mean?
+## Machine learning on coordinates
 
-- measurement units
-- as opposed to most variables, coordinates form pairs (or triplets)
-- without the other(s), single coordinate values loose much of their meaning
-
-- place information is often not summarized sufficiently by a pair of coordinates: one needs to have set of points, a linestring, a set of these, a polygon, a set of these, or some mix: (simple feature geometries)
-
-(go here into spherical geometry as opposed to planar geometry?)
-("simple" in simple features, but what does a "straight" line between two points _mean_, on a sphere?)
-
-- if we want to join information spatially, we have many predicates that can be used: intersects, overlaps, covers, touches, ... and more complex can be easily deviced (example: touch along line, not point)
-
-- after joining spatially, what happens to the attributes? if we want to analyse data, _support_ is of importance
-
-- next comes in: time (e.g., movement): linear? cyclic?
-
-- next comes in: field data (raster, data cubes)
-
-- spatial join may involve spatial aggregations:
-  I want to have property x for spatial geometries y:
+using coordinates as ML features, issues
