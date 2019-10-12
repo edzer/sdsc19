@@ -1,7 +1,7 @@
 ---
 title: "From Data Science to Spatial Data Science"
 author: "Edzer Pebesma, @edzerpebesma"
-date: "10/16/2019, Spatial Data Science Conference, NY; https://edzer.gihub.io/sdsc19/"
+date: "10/16/2019, Spatial Data Science Conference, NY; https://edzer.github.io/sdsc19/"
 output:
   ioslides_presentation:
     css: pres.css
