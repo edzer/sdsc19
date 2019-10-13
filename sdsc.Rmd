@@ -66,15 +66,133 @@ st_crs(nc)
 * relate a location to a particular reference ellipsoid ("datum") 
 * may describe a 2-D projection
 
-```{r}
-knitr::include_graphics('xkcd2.png')
+```{r fig.height=4}
+plot(nc[c("SID74")], key.pos = 4, axes = TRUE, graticule = TRUE)
+knitr::include_graphics('xkcd.png')
 ```
-https://xkcd.com/977/
+                                                                    https://xkcd.com/977/
+
+##
+
+```{r, echo=TRUE}
+pts = st_centroid(st_geometry(nc))
+st_crs(pts)
+pts[[1]]
+st_transform(pts[1], "+proj=longlat +datum=WGS84")[[1]]
+```
 
 ## Joining tables, spatially
 
 options, when geometry is not a point
 
+illustrate: overlaps, touches, touches-along-line
+
 ## Machine learning on coordinates
 
 using coordinates as ML features, issues
+
+## GIS and the curse of two-dimensionality
+
+```{r fig.height=3}
+library(rnaturalearth)
+w = ne_countries(returnclass = "sf")
+par(mar=c(3.1,3.1,0.1,0.1))
+plot(st_geometry(w), add = FALSE, border = 'orange', axes = TRUE, xlim = c(-180,180))
+g = st_make_grid() # global 10-degree grid
+plot(g, add = TRUE)
+plot(g[c(1,36)], col = c('red', 'green'), add = TRUE)
+```
+```{r echo=TRUE}
+g[c(1,36)] %>% st_touches()
+```
+
+----
+
+```{r,fig.height=3}
+g = st_make_grid()[1:108]
+g1 = st_transform(g, 3031)
+par(mar=rep(0,4))
+plot(g1)
+plot(g1[c(1,36)], col = c('red', 'green'), add = TRUE)
+plot(st_transform(w[7,1], 3031), add = TRUE, col = NA, border = 'orange')
+```
+```{r,echo=TRUE}
+g[c(1,36)] %>% st_transform(3031) %>% st_touches()
+g[c(1,36)] %>% st_transform(3031) %>% st_set_precision(units::set_units(1, mm)) %>% st_touches()
+```
+
+## Now we have three problems:
+```{r fig.height=4,fig.width=11}
+par(mfrow = c(1,2))
+g = st_make_grid()
+plot(g, axes = TRUE, main = 'equirectangular')
+plot(g[c(1,36)], col = c('red', 'green'), add = TRUE)
+plot(g1, main = 'polar stereographic')
+plot(g1[c(1,36)], col = c('red', 'green'), add = TRUE)
+```
+
+1. are polygons 1 (red) and 36 (green) square, or triangular?
+1. do they touch each other, or not?
+1. should we round polygons (always?) or not?
+
+```{r}
+g[c(1,36)] %>% st_transform(3031) %>% st_set_precision(units::set_units(1, mm)) %>% lwgeom::st_make_valid() #`[[`(1) #st_is_valid()
+```
+
+## Is this a real problem?
+
+* treating geodetic coordinates (degrees) as 2-D (GIS) often works fine, in particular for small areas not close to the poles
+* if *you* really _assume_ angles are interpreted as equirectangular, all is fine!
+* writing software that warns only in case of problems is very hard: when is a an answer wrong enough to trigger an error?
+* writing software that emits warnings (like sf) invites downstream developers to silence these warnings...
+* PostGIS ("geography", and `sf` through pkg `lwgeom`) currently take a half-hearted approach: 
+    * do many things "right" (areas, distances)
+    * don't offer or emulated complicated things (st_intersects, st_buffer) or warn;
+* modern systems (s2geometry/h3; Google Bigquery GIS, GEE) take an integral global approach, which makes a lot of sense to me
+* GeoJSON writes the problem hard in the standard: lines or polygons _shall never cross_ the antimeridian (180E/-180W)
+* modellers use a world from 0 to 360 degrees; many plots call for including the antimeridian; many grids are in long-lat after rotating poles
+
+## [GeoJSON](https://tools.ietf.org/html/rfc7946), 
+
+Clause  3.1.9. Antimeridian Cutting:
+
+*    In representing Features that cross the antimeridian, interoperability is improved by modifying their geometry.  Any geometry that crosses the antimeridian SHOULD be represented by cutting it in two such that neither part's representation crosses the antimeridian.
+
+## What does the polygon mean?
+
+for the polygon
+```{r}
+g[[1]]
+```
+the _simple feature access_ (OGC) standard says that we interpret this as points, connected by straight-line interpolation. What does that mean?
+
+* Equirectangular: follow lines with constant longitude or latitude (think graticule)
+* Constant direction (loxodrome): straight line on a Mercator projection
+* On the sphere:
+   * _real_ straight lines: take you from $S^2$ to $R^3$, meaning go subsurface (and require 3D coordinates)
+   * _great circle arcs_ (orthodrome): points on the circle that passes through the two points and the Earth's center
+   * something similar, but on an ellipsoid
+
+-----
+
+```{r fig.height = 3, fig.width=11}
+g0 = g[1]
+p1 = g0 %>% st_set_crs(NA) %>% st_segmentize(0.5)
+p2 = g0 %>% st_segmentize(units::set_units(10, km))
+par(mfrow = c(1, 2))
+plot(p2, axes = TRUE, ylim = c(-80.4,-80), border = 'green', main = 'equirectilinear')
+plot(p1, add = TRUE, border = 'red')
+p2 %>% st_transform(3031) %>% plot(axes = TRUE, border = 'green', ylim = c(-1.13e6,-1.05e6), main = 'polar stereographic')
+st_crs(p1) = 4326
+p1 %>% st_transform(3031) %>% plot(add = TRUE, border = 'red')
+```
+```{r, echo=TRUE}
+st_area(p1) %>% units::set_units(km^2) # segmentized along parallel
+st_area(p2) %>% units::set_units(km^2) # segmentized along great circle
+```
+```{r}
+a1 = st_area(p1) %>% units::set_units(km^2) # segmentized along parallel
+a2 = st_area(p2) %>% units::set_units(km^2) # segmentized along great circle
+d = (a1/a2) %>% units::set_units('%')
+d - units::set_units(100, "%")
+```
