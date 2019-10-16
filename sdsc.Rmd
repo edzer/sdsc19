@@ -1,7 +1,7 @@
 ---
 title: "From Data Science to Spatial Data Science"
 author: "Edzer Pebesma, @edzerpebesma"
-date: "10/16/2019, Spatial Data Science Conference, NY; https://edzer.github.io/sdsc19/"
+date: "10/16/2019, Spatial Data Science Conference, NY; https://edzer.github.io/sdsc19/     [(repo)](https://github.com/edzer/sdsc19)"
 output:
   ioslides_presentation:
     css: pres.css
@@ -269,13 +269,13 @@ knitr::include_graphics('landuse.png')
 * land use: point support (n is large)
 * population density: polygon support (n is 1)
 
-* downscaling: point support:
+* downscaling, point support:
 
     * simply by sampling
 
-* downscaling: area support:
+* downscaling, area support:
 
-    * assume constant/uniform (naive!) or use dasymetric mapping
+    * assume constant/uniform (naive!), or use dasymetric mapping
 	* decide whether the variable is extensive (divide) or intensive (average)
 
 ## Spatial data: raster
