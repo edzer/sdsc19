@@ -445,7 +445,7 @@ slide:not(.current) .plotly.html-widget{
 
 <ul>
 <li>you are trying to explain variability by <em>where</em>, instead of (or in addition to, or as an alternative to) <em>what</em> is going on there (feature variables); this may be competitive, but might be so for the wrong reason (extrapolation?)</li>
-<li>in case you have clustered training data and use naive (random) cross validation, location may pretty well point out the cluster, and result in overly optimistic performance</li>
+<li>in case you have clustered training data and use naive (random) cross validation, location may pretty well point out the cluster, and result in overly optimistic performance measures</li>
 <li>as with regression modelling strategies, check that the models are not sensitive to translations and rotations of coordinates (in \(R^2\), or \(S^2\), or both?)</li>
 </ul>
 
@@ -622,7 +622,18 @@ slide:not(.current) .plotly.html-widget{
 
 <ul>
 <li>land use: point support (n is large)</li>
-<li>population density: polygon support (n is 1)</li>
+<li><p>population density: polygon support (n is 1)</p></li>
+<li><p>downscaling: point support:</p>
+
+<ul>
+<li>simply by sampling</li>
+</ul></li>
+<li><p>downscaling: area support:</p>
+
+<ul>
+<li>assume constant/uniform (naive!) or use dasymetric mapping</li>
+<li>decide whether the variable is extensive (divide) or intensive (average)</li>
+</ul></li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Spatial data: raster</h2></hgroup><article  id="spatial-data-raster" class="smaller ">
