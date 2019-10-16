@@ -349,27 +349,27 @@ knitr::include_graphics('cube4.png')
 A lot of weather, climate model, and satellite imagery is available for free
 
 * ERA5, global reanalysis 1979-2019, .25$^o$ grid, global, 37 pressure levels (9 Pb)
-* Climate model intercomparison programs: CMIP4, CMIP5 (6 Pb)
-* Satellite imager: NASA, Copernicus data (...)
+* Climate model intercomparison programs: CMIP4, CMIP5 (3 Pb), CMIP6 (15 Pb)
+* Satellite imagery: NASA, Copernicus data (...)
 
 If a small dataset is needed, it can be downloaded; for larger analysis this quickly becomes impractical.
 
 * on cloud platforms serving the data, going through the files is often still tedious
 * a platform that offers high-level and fast (data cube based) access is Google Earth Engine (GEE)
 * GEE is, however, closed source and its free tier has usage restrictions
-* we ([openEO.org](https://openeo.org)) developed an open API (and several clients) which uses a data cube interface to a variety of cloud platforms (GEE, Geotrellis/GeoPySpark, Grass GIS/actinia, Rasdaman, ...)
+* we ([openEO.org](https://openeo.org)) developed an open API (and several clients) which uses a data cube interface to analyse data on a variety of cloud platform architectures (Geotrellis/GeoPySpark, Grass GIS/actinia, WCPS, GEE, ...)
 
 ## Summarizing
 
 1. spatial data can be seen as 
-    * tables, extended with geometries that have a coordinate reference system (DS)
-	* geometry sets, with attributes in tables (GIS)
+    * tables, extended with geometries that have a coordinate reference system (DS view)
+	* geometry sets, with attributes in tables (GIS view)
 1. for DS, many new operators become available (predicates, measures, intersection/buffer/union)
 1. it matters whether you conceive your data as flat, or on a sphere, for instance for what a "straight line" means 
-1. the legacy 2D GIS view may have had its days
+1. the legacy 2D flat/square GIS view may have had its days
 1. floating point ops often cause trouble in geometrical operations
-1. spatial data have a support, which is important for meaningfully analysing them, but often doesn't come with the data
+1. spatial data have a support, which is important for meaningfully analysing them, but many data formats/services don't reveal information about support
 1. spatiotemporal data can be irregular or regular
-1. irregular spatiotemporal data is often handled in tables (or nested tables)
-1. regular spatiotemporal data lead to vector or raster data cubes
+    * irregular spatiotemporal data is often handled in tables (or nested tables)
+    * regular spatiotemporal data can be handled as vector or raster data cubes
 1. there is a wealth of cube data openly available, still challenging to analyse, but with huge potential

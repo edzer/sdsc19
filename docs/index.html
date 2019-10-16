@@ -701,8 +701,8 @@ slide:not(.current) .plotly.html-widget{
 
 <ul>
 <li>ERA5, global reanalysis 1979-2019, .25\(^o\) grid, global, 37 pressure levels (9 Pb)</li>
-<li>Climate model intercomparison programs: CMIP4, CMIP5 (6 Pb)</li>
-<li>Satellite imager: NASA, Copernicus data (&#8230;)</li>
+<li>Climate model intercomparison programs: CMIP4, CMIP5 (3 Pb), CMIP6 (15 Pb)</li>
+<li>Satellite imagery: NASA, Copernicus data (&#8230;)</li>
 </ul>
 
 <p>If a small dataset is needed, it can be downloaded; for larger analysis this quickly becomes impractical.</p>
@@ -711,7 +711,7 @@ slide:not(.current) .plotly.html-widget{
 <li>on cloud platforms serving the data, going through the files is often still tedious</li>
 <li>a platform that offers high-level and fast (data cube based) access is Google Earth Engine (GEE)</li>
 <li>GEE is, however, closed source and its free tier has usage restrictions</li>
-<li>we (<a href='https://openeo.org' title=''>openEO.org</a>) developed an open API (and several clients) which uses a data cube interface to a variety of cloud platforms (GEE, Geotrellis/GeoPySpark, Grass GIS/actinia, Rasdaman, &#8230;)</li>
+<li>we (<a href='https://openeo.org' title=''>openEO.org</a>) developed an open API (and several clients) which uses a data cube interface to analyse data on a variety of cloud platform architectures (Geotrellis/GeoPySpark, Grass GIS/actinia, WCPS, GEE, &#8230;)</li>
 </ul>
 
 </article></slide><slide class=""><hgroup><h2>Summarizing</h2></hgroup><article  id="summarizing" class="smaller ">
@@ -720,17 +720,20 @@ slide:not(.current) .plotly.html-widget{
 <li>spatial data can be seen as
 
 <ul>
-<li>tables, extended with geometries that have a coordinate reference system (DS)</li>
-<li>geometry sets, with attributes in tables (GIS)</li>
+<li>tables, extended with geometries that have a coordinate reference system (DS view)</li>
+<li>geometry sets, with attributes in tables (GIS view)</li>
 </ul></li>
 <li>for DS, many new operators become available (predicates, measures, intersection/buffer/union)</li>
 <li>it matters whether you conceive your data as flat, or on a sphere, for instance for what a &quot;straight line&quot; means</li>
-<li>the legacy 2D GIS view may have had its days</li>
+<li>the legacy 2D flat/square GIS view may have had its days</li>
 <li>floating point ops often cause trouble in geometrical operations</li>
-<li>spatial data have a support, which is important for meaningfully analysing them, but often doesn&#39;t come with the data</li>
-<li>spatiotemporal data can be irregular or regular</li>
+<li>spatial data have a support, which is important for meaningfully analysing them, but many data formats/services don&#39;t reveal information about support</li>
+<li>spatiotemporal data can be irregular or regular
+
+<ul>
 <li>irregular spatiotemporal data is often handled in tables (or nested tables)</li>
-<li>regular spatiotemporal data lead to vector or raster data cubes</li>
+<li>regular spatiotemporal data can be handled as vector or raster data cubes</li>
+</ul></li>
 <li>there is a wealth of cube data openly available, still challenging to analyse, but with huge potential</li>
 </ol></article></slide>
 
